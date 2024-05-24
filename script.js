@@ -18,6 +18,10 @@ for (i=1; i<=16; i++) {
         let box = document.createElement("div");
         box.classList.add("box");
         row.appendChild(box);
+        box.addEventListener("mouseenter", color);
+        function color () {
+            box.style.backgroundColor = "black";
+        }
     }
     container.appendChild(row);
 }
@@ -25,5 +29,5 @@ for (i=1; i<=16; i++) {
 // Modifying the CSS stylesheet via JS
 style.insertRule("body {margin: 0; box-sizing: border-box;}")
 style.insertRule(".container {max-width: 800px; margin: 10px;}");
-style.insertRule(".row {display: flex; gap: 10px; margin: 10px auto; flex:1;}")
+style.insertRule(".row {display: flex; flex:1;}")
 style.insertRule(".box {width: 50px; height: 50px; background-color: white; flex-shrink: 1; border: 1px solid black;}");
