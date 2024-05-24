@@ -2,32 +2,61 @@
 
 const body = document.querySelector("body");
 const style = document.styleSheets[0];
+const gridBttn = document.querySelector(".gridSelector");
 
 let container = document.createElement("div");
 container.classList.add("container")
 body.appendChild(container);
 
+gridBttn.addEventListener("click", bttnClick);
+
+// Define a function to get the user input to select the size of the sketchpad grid.
+// Function will need to ensure the input is a number between 1 and 100, and handle edge cases such as trailing spaces
+function getUserInput() {
+    let gridPrompt = "To select the number of rows and columns in your sketchpad, please enter a number " +
+    "between 1 and 100:";
+    let userInput;
+
+    do {
+        userInput = prompt(gridPrompt);
+    } while (userInput === null 
+        || isNaN(userInput) 
+        || userInput.trim() === "" 
+        || Number(userInput) < 1 
+        || Number(userInput) > 100);
+
+    return Number(userInput.trim());
+}
+
 // Want to avoid duplicate code, so use nested for loops to create our grid;
 // Used row + column boxes in order to ensure each row has the correct number of boxes;
 // Alternative would be to not define the number in a row and instead make boxes directly into container and let 
 // the container flex-wrap - but this doesn't guarantee a fixed number of elements per row;
-for (i=1; i<=16; i++) {
-    let row = document.createElement("div");
-    row.classList.add("row");
-    for (j=1; j<=16; j++) {
-        let box = document.createElement("div");
-        box.classList.add("box");
-        row.appendChild(box);
-        box.addEventListener("mouseenter", color);
-        function color () {
-            box.style.backgroundColor = "black";
+function createGrid(userInput) {
+    for (i=1; i<=userInput; i++) {
+        let row = document.createElement("div");
+        row.classList.add("row");
+        for (j=1; j<=userInput; j++) {
+            let box = document.createElement("div");
+            box.classList.add("box");
+            row.appendChild(box);
+            box.addEventListener("mouseenter", color);
+            function color () {
+                box.style.backgroundColor = "black";
+            }
         }
+        container.appendChild(row);
     }
-    container.appendChild(row);
+}
+
+function bttnClick() {
+    let userInput;
+    userInput = getUserInput();
+    createGrid(userInput);
 }
 
 // Modifying the CSS stylesheet via JS
 style.insertRule("body {margin: 0; box-sizing: border-box;}")
-style.insertRule(".container {max-width: 800px; margin: 10px;}");
-style.insertRule(".row {display: flex; flex:1;}")
-style.insertRule(".box {width: 50px; height: 50px; background-color: white; flex-shrink: 1; border: 1px solid black;}");
+style.insertRule(".container {max-width: 1200px; max-height: 1200px; width: 100%; margin: 10px; display: flex; flex-direction: column;}");
+style.insertRule(".row {display: flex; flex:1; width: 100%;}")
+style.insertRule(".box {min-height: 5px; min-width: 5px; height: 10px; width: 10px; background-color: white; flex-shrink: 1; border: 1px solid black;}");
